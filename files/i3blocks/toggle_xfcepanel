@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Check if xfce4-panel is running
+if pgrep xfce4-panel > /dev/null; then
+    # If it is running, kill it
+    killall xfce4-panel
+else
+    # If it is not running, start it
+    xfce4-panel &
+fi
+

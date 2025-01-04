@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# ANSI color code for orange
+WHITE='<span color="#FFFFFF">'
+# ANSI color code for red
+RED='<span color="#af1601">'
+# ANSI color code to reset color back to default
+NC='</span>'
+
+# Get the current DPMS status
+DPMS_STATUS=$(xset q | grep "DPMS is" | awk '{print $3}')
+
+case $BLOCK_BUTTON in
+    # On left click
+    1)
+        if [ "$DPMS_STATUS" == "Enabled" ]; then
+	        # Disable screen saver and screen blanking
+            xset s off -dpms
+        elif [ "$DPMS_STATUS" == "Disabled" ]; then
+            # Enable screen saver and screen blanking
+            xset s 300 +dpms
+	    fi
+        ;;
+esac
+
+if [ "$DPMS_STATUS" == "Enabled" ]; then
+    output=" "
+elif [ "$DPMS_STATUS" == "Disabled" ]; then
+    output="<u>${RED} ${NC}</u>"
+fi
+
+echo -e "$output"

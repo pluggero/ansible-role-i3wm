@@ -1,0 +1,21 @@
+---
+i3wm_dep_pkgs:
+  # - i3blocks # NOTE: i3blocks v1.5 is not available in the Debian repos
+  # Dep pkgs to build i3blocks from source
+  - build-essential
+  - autoconf
+  - pkg-config
+  # ------------------------------
+  # i3blocks script dep pkgs
+  - sysstat
+  # ------------------------------
+  - i3lock
+  - rofi
+  - feh
+  - pulsemixer
+  - flameshot
+  - firefox-esr
+  - btop
+
+i3wm_distro_packages:
+  - i3

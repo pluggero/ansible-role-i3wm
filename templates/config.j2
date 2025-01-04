@@ -1,0 +1,221 @@
+set $mod {{ i3wm_modifier }}
+set $term {{ i3wm_terminal }}
+
+# Workspace Variables
+{% for workspace in i3wm_workspaces %}
+set $workspace{{ workspace.id }} "{{ workspace.name }}"
+{% endfor %}
+
+# Gaps
+gaps inner 6
+gaps outer 0
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:DejaVu Sans {{ i3wm_font_size }}
+
+# Focus Settings
+focus_follows_mouse {{ i3wm_focus_follows_mouse | ansible.builtin.ternary('yes', 'no' ) }}
+focus_wrapping yes
+focus_on_window_activation smart
+mouse_warping output
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Workspace Layout
+default_orientation horizontal
+workspace_layout default
+workspace_auto_back_and_forth no
+
+# Border Layout
+default_border normal 2
+default_floating_border normal 2
+hide_edge_borders none
+
+# Colors
+client.focused #83a598 #282828 #d5c4a1 #b8bb26 #83a598
+client.focused_inactive #665c54 #282828 #d5c4a1 #b8bb26 #665c54
+client.unfocused #665c54 #282828 #d5c4a1 #b8bb26 #665c54
+client.urgent #fb4934 #282828 #d5c4a1 #b8bb26 #fb4934
+client.placeholder #665c54 #282828 #d5c4a1 #b8bb26 #665c54
+client.background #282828
+
+# Keybindings - Workspaces
+{% for workspace in i3wm_workspaces %}
+bindsym $mod+{{ workspace.id }} workspace $workspace{{ workspace.id }}
+{% endfor %}
+
+# Keybindings - Exec
+bindsym $mod+Return exec --no-startup-id $term
+bindsym $mod+Shift+Return exec --no-startup-id $term -e tmux
+bindsym $mod+d exec --no-startup-id rofi -show drun
+bindsym Mod4+Shift+s exec --no-startup-id alacritty -e pulsemixer
+bindsym Mod4+i exec --no-startup-id alacritty -e btop
+bindsym Mod4+Shift+x exec --no-startup-id {{ i3wm_lockscreen_command }}
+bindsym Mod4+c exec --no-startup-id {{ i3wm_screenshot_command }}
+bindsym Mod4+b exec --no-startup-id {{ i3wm_browser_command }}
+
+# Keybindings - Kill
+bindsym $mod+Shift+q kill
+
+# Keybindings - Focus Container
+bindsym Mod4+Up focus up
+bindsym Mod4+k focus up
+bindsym Mod4+Down focus down
+bindsym Mod4+j focus down
+bindsym Mod4+Left focus left
+bindsym Mod4+h focus left
+bindsym Mod4+Right focus right
+bindsym Mod4+l focus right
+
+bindsym Mod4+a focus parent
+bindsym Mod4+x focus child
+
+bindsym Mod4+space floating toggle
+bindsym Mod4+Shift+space focus mode_toggle
+bindsym Mod4+f fullscreen
+
+# Keybindings - Move Container
+bindsym Mod4+Shift+Up move up
+bindsym Mod4+Shift+k move up
+bindsym Mod4+Shift+Down move down
+bindsym Mod4+Shift+j move down
+bindsym Mod4+Shift+Left move left
+bindsym Mod4+Shift+h move left
+bindsym Mod4+Shift+Right move right
+bindsym Mod4+Shift+l move right
+
+# Keybindings - Move Container to Workspace
+{% for workspace in i3wm_workspaces %}
+bindsym $mod+Shift+{{ workspace.id }} move container to workspace $workspace{{ workspace.id }}
+{% endfor %}
+
+# Keybindings - Move Workspaces
+bindsym Mod4+Shift+comma move workspace to output left
+bindsym Mod4+Shift+period move workspace to output right
+
+# Keybindings - Split Workspaces
+bindsym Mod4+m split h
+bindsym Mod4+n split v
+
+# Keybindings - Workspace Layout
+bindsym Mod4+s layout stacking
+bindsym Mod4+t layout tabbed
+bindsym Mod4+w layout toggle split
+
+# Keybindings - Volume/ Brightness
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +5%
+
+# Keybindings - i3 environment
+bindsym Mod4+Shift+r restart
+bindsym Mod4+Shift+e exec --no-startup-id "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Register extra Keybindings
+{% for keybinding in i3wm_keybindings_extra %}
+bindsym {{ keybinding.key }} exec {{ keybinding.exec }}
+{% endfor %}
+
+# Container Resize
+bindsym $mod+r mode "resize"
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym k resize grow height 10 px or 10 ppt
+
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym j resize shrink width 10 px or 10 ppt
+
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym h resize grow width 10 px or 10 ppt
+
+  bindsym Right resize grow width 10 px or 10 ppt
+  bindsym l resize shrink height 10 px or 10 ppt
+
+  bindsym Escape mode default
+  bindsym Return mode default
+}
+bindsym Mod4+Control+Down resize grow   height 10
+bindsym Mod4+Control+Left resize shrink width  10
+bindsym Mod4+Control+Right resize grow   width  10
+bindsym Mod4+Control+Up resize shrink height 10
+
+# Exec always
+exec_always --no-startup-id i3-msg workspace 1
+exec_always --no-startup-id setxkbmap -model pc104 -layout us -variant intl
+exec_always --no-startup-id xset s off -dpms
+
+# Workspace Monitor Setup
+{% for monitor in i3wm_monitors %}
+{%     for workspace in monitor.workspaces %}
+workspace $workspace{{ workspace }} output {{ monitor.output }}
+{%     endfor %}
+{% endfor %}
+
+# Application Setup
+{% for application in i3wm_applications %}
+assign [class="{{ application.class }}"] $workspace{{ application.workspace }}
+{% endfor %}
+
+# i3bar
+bar {
+  id main
+  font pango:DejaVu Sans {{ i3wm_font_size }}
+  status_command i3blocks
+  position top
+  mode dock
+  modifier None
+  colors {
+    background #282828
+    statusline #d5c4a1
+    separator #665c54
+    focused_workspace #83a598 #282828 #d5c4a1
+    active_workspace #282828 #282828 #83a598
+    inactive_workspace #282828 #282828 #d5c4a1
+    urgent_workspace #fb4934 #282828 #d5c4a1
+    binding_mode #282828 #fb4934 #d5c4a1
+  }
+}
+
+# Setup Monitors
+exec_always sleep 1 && xrandr \
+{% for monitor in i3wm_monitors %} \
+  --output {{ monitor.output }} \
+  --mode {{ monitor.mode }} \
+  --pos {{ monitor.pos }} \
+  --rotate {{ monitor.rotate }}
+{% endfor %}
+
+# Background
+{% if i3wm_wallpaper | bool %}
+exec_always feh --bg-scale {{ i3wm_lockscreen_image }}
+{% endif %}
+
+{% if i3wm_no_screensaver | bool %}
+# Disable screensaver
+exec_always xset s off
+exec xset -dpms
+{% endif %}
+
+{% if i3wm_disable_beep | bool %}
+exec_always xset b off
+{% endif %}
+
+{% if i3wm_xautolock | bool %}
+exec xautolock -time {{ i3wm_screensaver_time }} -locker 'maim /tmp/screen_locked.png; mogrify -scale 10% -scale 1000% /tmp/screen_locked.png; i3lock -i /tmp/screen_locked.png'
+{% endif %}
+
+# Start Default Applications
+{% for application in i3wm_applications if application.on_startup %}
+exec sleep 5 && {{ application.name }}
+{% endfor %}
+
+{% for app in i3wm_run_on_startup %}
+exec sleep 12 && {{ i3wm_run_on_startup }}
+{% endfor %}

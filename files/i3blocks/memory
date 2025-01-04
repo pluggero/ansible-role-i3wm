@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Get memory information in MiB directly using awk
+memory_info=$(free -m | awk '/^Mem:/{print $2, $3}')
+
+# Read total and used memory from the output
+read total used <<< "$memory_info"
+
+# Convert to GiB and round to the nearest integer for display
+total_gb=$((total / 1024))
+used_gb=$((used / 1024))
+
+# Print used/total memory without decimal values
+echo -e "\uf0c7  $used_gb | $total_gb"
+
+# Exit with success
+exit 0

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Define the location of the XFCE theme and Terminal settings
+THEME_SETTING="$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml"
+TERMINAL_RC="$HOME/.config/xfce4/terminal/terminalrc"
+
+# Check if the settings files exist
+if [ ! -f "$THEME_SETTING" ] || [ ! -f "$TERMINAL_RC" ]; then
+    echo "XFCE or Terminal settings file not found. Ensure that XFCE and XFCE Terminal are installed and have been run at least once."
+    exit 1
+fi
+
+# Get the current theme
+current_theme=$(xfconf-query -c xsettings -p /Net/ThemeName)
+
+# Switch the theme and terminal colors
+if [ "$current_theme" == "Adwaita" ]; then
+    # Switch to Adwaita-dark theme
+    xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita-dark"
+    # Change Terminal background to dark gray and text color to white
+    sed -i 's/ColorBackground=.*/ColorBackground=#131926/' $TERMINAL_RC
+    sed -i 's/ColorForeground=.*/ColorForeground=#FFFFFF/' $TERMINAL_RC
+elif [ "$current_theme" == "Adwaita-dark" ]; then
+    # Switch to Adwaita theme
+    xfconf-query -c xsettings -p /Net/ThemeName -s "Adwaita"
+    # Change Terminal background to light gray and text color to black
+    sed -i 's/ColorBackground=.*/ColorBackground=#D3D7CF/' $TERMINAL_RC
+    sed -i 's/ColorForeground=.*/ColorForeground=#000000/' $TERMINAL_RC
+else
+    echo "The current theme is not Adwaita or Adwaita-dark. No changes were made."
+fi
+

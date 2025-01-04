@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Default threshold values
+WARNING_THRESHOLD=50
+CRITICAL_THRESHOLD=80
+
+# Pango color definitions
+GREEN='<span color="#90EE90">'
+ORANGE='<span color="#fcb207">'
+RED='<span color="#af1601">'
+NC='</span>'  # Reset color
+
+function display_help {
+    echo "Usage: cpu_usage [-w <warning>] [-c <critical>]"
+    echo "-w <percent>: warning threshold to become yellow"
+    echo "-c <percent>: critical threshold to become red"
+    exit 0
+}
+
+# Parse command line options
+while getopts "w:c:h" opt; do
+    case $opt in
+        w) WARNING_THRESHOLD=$OPTARG ;;
+        c) CRITICAL_THRESHOLD=$OPTARG ;;
+        h) display_help ;;
+        *) display_help ;;
+    esac
+done
+
+# Set locale for consistent parsing
+export LC_ALL=en_US.UTF-8
+
+# Get CPU usage using mpstat
+CPU_USAGE=$(mpstat 1 1 | awk '/^Average/ { printf "%.0f\n", 100 - $NF }')
+
+# Check if CPU usage was retrieved
+if [[ -z $CPU_USAGE ]]; then
+    echo "Error: Can't find CPU information"
+    exit 1
+fi
+
+# Determine color based on thresholds
+if (( CPU_USAGE >= CRITICAL_THRESHOLD )); then
+    COLOR=$RED
+elif (( CPU_USAGE >= WARNING_THRESHOLD )); then
+    COLOR=$ORANGE
+else
+    COLOR=""
+    NC=""
+fi
+
+# Print CPU usage with color using echo
+echo -e "${COLOR}  $CPU_USAGE %${NC}"
+
+

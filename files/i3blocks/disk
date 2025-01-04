@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Get disk usage statistics for root (/)
+disk_info=$(df /)
+
+# Extract the total space, used space, and percentage used
+total_space=$(echo "$disk_info" | awk 'NR==2 {print $2/1024/1024}')
+used_space=$(echo "$disk_info" | awk 'NR==2 {print $3/1024/1024}')
+free_space=$(echo "$disk_info" | awk 'NR==2 {print $4/1024/1024}')
+percentage_used=$(echo "$disk_info" | awk 'NR==2 {print $5}')
+
+# Print values without decimal values
+echo -e "\uf0a0  ${used_space%.*} | ${total_space%.*} ($percentage_used)"

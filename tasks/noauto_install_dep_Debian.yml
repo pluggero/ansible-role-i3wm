@@ -1,0 +1,92 @@
+---
+- name: Ensure we are using apt
+  fail:
+    msg: "This role only supports {{ ansible_os_family }} systems that use apt as a package manager."
+  when: ansible_pkg_mgr != "apt"
+
+- name: Install i3wm dependencies via apt
+  block:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+      become: true
+
+    - name: Ensure i3wm dependencies are installed
+      ansible.builtin.apt:
+        name: "{{ i3wm_dep_pkgs }}"
+        state: present
+      become: true
+
+- name: Ensure i3blocks is installed
+  block:
+    - name: Get installed i3blocks version
+      ansible.builtin.command: i3blocks -V
+      ignore_errors: true
+      changed_when: false
+      failed_when: false
+      register: i3wm_i3blocks_version_cmd
+
+    - name: Extract only the version into a variable
+      ansible.builtin.set_fact:
+        i3wm_i3blocks_installed_version: "{{ i3wm_i3blocks_version_cmd.stdout | regex_replace('^.*?([\\d\\.]{2,}).*$', '\\1') }}"
+
+    - name: Debug installed i3blocks version
+      ansible.builtin.debug:
+        var: i3wm_i3blocks_installed_version
+
+    - name: Force install if the version numbers do not match
+      ansible.builtin.set_fact:
+        i3wm_i3blocks_reinstall_from_source: true
+      when:
+        - i3wm_i3blocks_installed_version is defined
+        - i3wm_i3blocks_installed_version != i3wm_i3blocks_version
+
+    # NOTE: This is a workaround for the fact that the i3blocks version 1.5 is not available in the default Debian repositories
+    - name: Install i3blocks from source
+      block:
+        - name: Download i3blocks
+          ansible.builtin.get_url:
+            url: "https://github.com/vivien/i3blocks/archive/refs/tags/{{ i3wm_i3blocks_version }}.tar.gz"
+            dest: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}.tar.gz"
+
+        - name: Extract archive
+          ansible.builtin.unarchive:
+            src: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}.tar.gz"
+            dest: "/tmp/"
+            remote_src: true
+
+        - name: Auto-generate build scripts
+          ansible.builtin.command:
+            cmd: "./autogen.sh"
+            chdir: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}"
+
+        - name: Configure install
+          ansible.builtin.command:
+            cmd: "./configure"
+            chdir: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}"
+
+        - name: Build i3blocks
+          ansible.builtin.command:
+            cmd: "make"
+            chdir: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}"
+
+        - name: Install i3blocks
+          ansible.builtin.command:
+            cmd: "make install"
+            chdir: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}"
+          become: true
+
+        - name: Remove build directory
+          ansible.builtin.file:
+            path: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}"
+            state: absent
+
+        - name: Remove archive
+          ansible.builtin.file:
+            path: "/tmp/i3blocks-{{ i3wm_i3blocks_version }}.tar.gz"
+            state: absent
+
+      when: i3wm_i3blocks_installed_version is not defined or i3wm_i3blocks_reinstall_from_source
+
+  when: ansible_pkg_mgr == "apt"

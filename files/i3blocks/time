@@ -1,0 +1,7 @@
+#!/bin/bash
+
+case $BLOCK_BUTTON in
+    1) yad --calendar --show-weeks ;;
+esac
+
+date +"%H:%M:%S %p"

@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# ANSI color code for green
+GREEN='<span color="#90EE90">'
+# ANSI color code for orange
+ORANGE='<span color="#fcb207">'
+# ANSI color code for red
+RED='<span color="#af1601">'
+# ANSI color code to reset color back to default
+NC='</span>'
+
+# Function to get IP and subnet mask
+get_ip_and_mask() {
+    interface=$1
+    ip_and_mask=$(nmcli -g IP4.ADDRESS device show $interface | head -n1)
+    if [ -z "$ip_and_mask" ]; then
+        ip_and_mask=$(nmcli -g IP6.ADDRESS device show $interface | awk -F'|' '{print $1}' | sed 's/\\//g')
+    fi
+    [ -z "$ip_and_mask" ] && ip_and_mask="N/A"
+    echo $ip_and_mask
+}
+
+# Function to get WIFI SSID
+get_ssid() {
+    ssid=$(iwgetid -r)
+    [ -z "$ssid" ] && ssid="N/A"
+    echo $ssid
+}
+
+# Get the default interface with the lowest metric
+default_interface=$(ip route | grep default | awk '{print $5, $9}' | sort -k2n | head -n1 | cut -d' ' -f1)
+
+# Get all default interfaces with their metrics
+declare -A default_interfaces
+while read -r line; do
+    interface=$(echo "$line" | cut -d' ' -f1)
+    metric=$(echo "$line" | cut -d' ' -f2)
+    default_interfaces[$interface]=$metric
+done < <(ip route | grep default | awk '{print $5, $9}')
+
+# Get all connected interfaces
+connected_interfaces=($(nmcli -t -f DEVICE,STATE device status | grep :connected | awk -F":" '{print $1}'))
+
+output=""
+if [[ ${#connected_interfaces[@]} -eq 0 ]]; then
+    output="Not connected"
+else
+    for index in "${!connected_interfaces[@]}"; do
+        interface=${connected_interfaces[$index]}
+        # Fetch type of the interface
+        interface_type=$(nmcli -t -f DEVICE,TYPE device | grep -w $interface | cut -d':' -f2 | awk '{print $1; exit}')
+
+        # Check if this interface is the default one
+        if [[ $interface == $default_interface ]]; then
+            color="$GREEN"
+        elif [[ -n "${default_interfaces[$interface]}" ]]; then
+            color="$ORANGE"
+        else
+            color="$RED"
+        fi
+
+        if [[ $interface_type == "wifi" ]]; then
+            output+="Wifi($(get_ssid)): ${color}$(get_ip_and_mask $interface)${NC}"
+        elif [[ $interface_type == "ethernet" ]]; then
+            output+="Ethernet($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+        elif [[ $interface_type == "vlan" ]]; then
+            output+="VLAN($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+        elif [[ $interface_type == tun ]]; then
+            output+="VPN($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+        elif [[ $interface_type == "gsm" ]]; then
+            output+="GSM($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+	#elif [[ $interface_type == "loopback" ]]; then
+	#    output+="LOOP($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+	elif [[ $interface_type == "bridge" ]]; then
+            output+="BRIDGE($interface): ${color}$(get_ip_and_mask $interface)${NC}"
+        fi
+
+        # Add the separator if this isn't the last interface
+        if [[ $index -ne $((${#connected_interfaces[@]}-1)) ]]; then
+            output+=" "
+        fi
+    done
+fi
+
+# output for i3blocks
+echo -e "$output" | awk 'NF'
+

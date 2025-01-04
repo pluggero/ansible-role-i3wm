@@ -1,0 +1,61 @@
+---
+- name: Configure i3wm
+  block:
+    - name: Ensure config folder exists
+      ansible.builtin.file:
+        path: "{{ i3wm_config_dir }}"
+        state: directory
+        mode: "0750"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Add and validate i3wm config file
+      ansible.builtin.template:
+        src: "{{ role_path }}/templates/config.j2"
+        dest: "{{ i3wm_config_dir }}/config"
+        mode: "0600"
+        backup: true
+        validate: i3 -C -c %s
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Add images
+      ansible.builtin.copy:
+        src: "{{ image.src }}"
+        dest: "{{ image.dest }}"
+        mode: 0644
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+      loop:
+        - { src: "files/background.png", dest: "{{ i3wm_background_image }}" }
+        - { src: "files/lockscreen.png", dest: "{{ i3wm_lockscreen_image }}" }
+      loop_control:
+        loop_var: image
+      become: true
+      when: i3wm_wallpaper | bool
+
+- name: Configure i3blocks
+  block:
+    - name: Ensure config folder exists
+      ansible.builtin.file:
+        path: "{{ i3wm_i3blocks_config_dir }}"
+        state: directory
+        mode: "0750"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Add i3blocks config file
+      ansible.builtin.template:
+        src: "{{ role_path }}/templates/i3blocks.j2"
+        dest: "{{ i3wm_i3blocks_config_dir }}/config"
+        mode: "0600"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+
+    - name: Add i3blocks scripts
+      ansible.builtin.copy:
+        src: "files/i3blocks/"
+        dest: "{{ i3wm_i3blocks_scripts_dir }}"
+        mode: 0750
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"

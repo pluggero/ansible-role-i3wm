@@ -1,0 +1,16 @@
+---
+i3wm_dep_pkgs:
+  - i3blocks
+  # i3blocks script dep pkgs
+  - sysstat
+  # ------------------------------
+  - i3lock
+  - rofi
+  - feh
+  - pulsemixer
+  - flameshot
+  - firefox
+  - btop
+
+i3wm_distro_packages:
+  - i3

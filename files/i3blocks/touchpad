@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# ANSI color code for orange
+WHITE='<span color="#FFFFFF">'
+# ANSI color code for red
+RED='<span color="#af1601">'
+# ANSI color code to reset color back to default
+NC='</span>'
+
+# Get TouchpadOff value
+TOUCH_STATUS=$(synclient -l | grep -i "TouchpadOff" | cut -d "=" -f 2 | tr -d ' ')
+
+# Check if TouchpadOff=1 or not
+if [ $TOUCH_STATUS -eq 1 ]; then
+    output+="${RED}\uf040${NC}"
+else
+    output+="${WHITE}\uf040${NC}"
+fi
+
+echo -e "$output"
