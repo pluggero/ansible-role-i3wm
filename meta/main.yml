@@ -5,7 +5,7 @@ galaxy_info:
   role_name: i3wm
   namespace: pluggero
   author: pluggero
-  description: Installs a basic configuration of I3 Window Manager on various Linux distributions.
+  description: Installs a basic configuration of i3 Window Manager on various Linux distributions.
   company: Pluggramming
   license: license (MIT)
   min_ansible_version: "2.10"

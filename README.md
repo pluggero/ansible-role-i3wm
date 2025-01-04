@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/pluggero/ansible-role-i3wm/actions/workflows/ci.yml/badge.svg)](https://github.com/pluggero/ansible-role-i3wm/actions/workflows/ci.yml) [![Ansible Galaxy downloads](https://img.shields.io/ansible/role/d/pluggero/i3wm?label=Galaxy%20downloads&logo=ansible&color=%23096598)](https://galaxy.ansible.com/ui/standalone/roles/pluggero/i3wm)
 
-An Ansible Role that installs a basic configuration of I3 Window Manger.
+An Ansible Role that installs a basic configuration of i3 Window Manger.
 
 ## Requirements
 
