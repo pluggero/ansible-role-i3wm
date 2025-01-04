@@ -1,10 +1,11 @@
 ---
 - name: Ensure we are using apt
-  fail:
+  ansible.builtin.fail:
     msg: "This role only supports {{ ansible_os_family }} systems that use apt as a package manager."
   when: ansible_pkg_mgr != "apt"
 
 - name: Install i3wm via apt
+  when: ansible_pkg_mgr == "apt"
   block:
     - name: Update apt cache
       ansible.builtin.apt:
@@ -17,5 +18,3 @@
         name: "{{ i3wm_distro_packages }}"
         state: present
       become: true
-
-  when: ansible_pkg_mgr == "apt"

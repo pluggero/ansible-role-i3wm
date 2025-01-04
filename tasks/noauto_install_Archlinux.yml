@@ -1,10 +1,11 @@
 ---
 - name: Ensure we are using pacman
-  fail:
+  ansible.builtin.fail:
     msg: "This role only supports {{ ansible_os_family }} systems that use pacman as a package manager."
   when: ansible_pkg_mgr != "pacman"
 
 - name: Install i3wm via pacman
+  when: ansible_pkg_mgr == "pacman"
   block:
     - name: Update pacman cache
       community.general.pacman:
@@ -16,5 +17,3 @@
         name: "{{ i3wm_distro_packages }}"
         state: present
       become: true
-
-  when: ansible_pkg_mgr == "pacman"
