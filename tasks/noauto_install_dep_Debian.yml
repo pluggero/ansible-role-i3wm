@@ -20,7 +20,6 @@
       become: true
 
 - name: Ensure i3blocks is installed
-  when: i3wm_i3blocks_installed_version is not defined or i3wm_i3blocks_reinstall_from_source
   block:
     - name: Get installed i3blocks version
       ansible.builtin.command: i3blocks -V
@@ -46,6 +45,7 @@
 
     # NOTE: This is a workaround for the fact that the i3blocks version 1.5 is not available in the default Debian repositories
     - name: Install i3blocks from source
+      when: i3wm_i3blocks_installed_version is not defined or i3wm_i3blocks_reinstall_from_source
       block:
         - name: Download i3blocks
           ansible.builtin.get_url:
