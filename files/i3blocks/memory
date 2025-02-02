@@ -11,7 +11,7 @@ total_gb=$((total / 1024))
 used_gb=$((used / 1024))
 
 # Print used/total memory without decimal values
-echo -e "\uf0c7  $used_gb | $total_gb"
+echo -e "\uf0c7 $used_gb|$total_gb"
 
 # Exit with success
 exit 0

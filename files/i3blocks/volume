@@ -8,7 +8,7 @@ volume=$(pactl list sinks | grep -A 15 'Name: '$sink'' | grep 'Volume:' | grep -
 mute=$(pactl list sinks | grep -A 15 'Name: '$sink'' | grep -m 1 Mute | awk '{print $2}')
 
 if [ "$mute" = "yes" ]; then
-	echo "  $volume%"
+	echo " $volume%"
 else
-	echo "   $volume%"
+	echo "  $volume%"
 fi

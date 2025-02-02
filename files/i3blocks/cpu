@@ -50,6 +50,6 @@ else
 fi
 
 # Print CPU usage with color using echo
-echo -e "${COLOR}  $CPU_USAGE %${NC}"
+echo -e "${COLOR} $CPU_USAGE%${NC}"
 
 

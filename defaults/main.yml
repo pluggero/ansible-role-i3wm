@@ -81,7 +81,9 @@ i3wm_workspaces:
     name: "10"
 
 # Font
-i3wm_font_size: 10
+i3wm_font:
+  size: 10
+  family: "Hack Nerd Font"
 i3wm_focus_follows_mouse: true
 
 i3wm_wallpaper: true
