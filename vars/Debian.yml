@@ -8,13 +8,13 @@ i3wm_dep_pkgs:
   # ------------------------------
   # i3blocks script dep pkgs
   - sysstat
+  - pulseaudio-utils
   # ------------------------------
   - i3lock
   - rofi
   - feh
   - pulsemixer
   - flameshot
-  - firefox-esr
   - btop
 
 i3wm_distro_packages:
