@@ -5,6 +5,8 @@ i3wm_dep_pkgs:
   # i3blocks script dep pkgs
   - sysstat
   - libpulse
+  - acpi
+  - lm_sensors
   # ------------------------------
   - i3lock
   - rofi
