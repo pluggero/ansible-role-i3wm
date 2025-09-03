@@ -1,90 +1,90 @@
 [network]
-background=#3a4553
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.primary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/network
 interval=5
-label=<span foreground='#3a4553' background='#282828' size='x-large'> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.primary_bg }}' background='{{ i3wm_i3blocks_colors.secondary_bg }}' size='x-large'> </span>
 markup=pango
 separator_block_width=0
 
 [volume]
-background=#282828
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.secondary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/volume
 interval=1
-label=<span foreground='#282828' background='#3a4553' size='x-large'> </span><span background='#282828'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.secondary_bg }}' background='{{ i3wm_i3blocks_colors.primary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.secondary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [toggle_idle]
-background=#3a4553
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.primary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/toggle_idle
 interval=1
-label=<span foreground='#3a4553' background='#282828' size='x-large'> </span><span background='#3a4553'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.primary_bg }}' background='{{ i3wm_i3blocks_colors.secondary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.primary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [cpu]
-background=#282828
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.secondary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/cpu
 interval=1
-label=<span foreground='#282828' background='#3a4553' size='x-large'> </span><span background='#282828'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.secondary_bg }}' background='{{ i3wm_i3blocks_colors.primary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.secondary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [memory]
-background=#3a4553
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.primary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/memory
 interval=5
-label=<span foreground='#3a4553' background='#282828' size='x-large'> </span><span background='#3a4553'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.primary_bg }}' background='{{ i3wm_i3blocks_colors.secondary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.primary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [disk]
-background=#282828
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.secondary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/disk
 interval=60
-label=<span foreground='#282828' background='#3a4553' size='x-large'> </span><span background='#282828'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.secondary_bg }}' background='{{ i3wm_i3blocks_colors.primary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.secondary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [temperature]
-background=#3a4553
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.primary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/temperature
 interval=1
-label=<span foreground='#3a4553' background='#2e3440' size='x-large'> </span><span background='#3a4553'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.primary_bg }}' background='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.primary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [battery]
-background=#282828
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.secondary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/battery
 interval=5
-label=<span foreground='#282828' background='#2e3440' size='x-large'> </span><span background='#282828'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.secondary_bg }}' background='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.secondary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [date]
-background=#3a4553
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.primary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/date
 interval=5
-label=<span foreground='#3a4553' background='#282828' size='x-large'> </span><span background='#3a4553'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.primary_bg }}' background='{{ i3wm_i3blocks_colors.secondary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.primary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 
 [time]
-background=#282828
-color=#ebdbb2
+background={{ i3wm_i3blocks_colors.secondary_bg }}
+color={{ i3wm_i3blocks_colors.text_color }}
 command={{ i3wm_i3blocks_scripts_dir }}/time
 interval=1
-label=<span foreground='#282828' background='#3a4553' size='x-large'> </span><span background='#282828'><span foreground='#2e3440' size='x-large'></span> </span>
+label=<span foreground='{{ i3wm_i3blocks_colors.secondary_bg }}' background='{{ i3wm_i3blocks_colors.primary_bg }}' size='x-large'> </span><span background='{{ i3wm_i3blocks_colors.secondary_bg }}'><span foreground='{{ i3wm_i3blocks_colors.separator_color }}' size='x-large'></span> </span>
 markup=pango
 separator_block_width=0
 

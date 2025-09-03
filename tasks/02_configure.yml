@@ -27,8 +27,8 @@
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
       loop:
-        - src: "files/background.png"
-          dest: "{{ i3wm_background_image }}"
+        - src: "files/wallpaper.png"
+          dest: "{{ i3wm_wallpaper_image }}"
         - src: "files/lockscreen.png"
           dest: "{{ i3wm_lockscreen_image }}"
       loop_control:
