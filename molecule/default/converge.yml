@@ -3,7 +3,7 @@
   hosts: all
 
   vars:
-    ansible_user: root
+    ansible_user: vagrant
 
   pre_tasks:
     - name: Update apt cache
