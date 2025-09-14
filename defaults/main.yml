@@ -37,11 +37,13 @@ i3wm_focus_follows_mouse: true
 
 # Wallpaper and Screensaver settings
 i3wm_wallpaper: true
-i3wm_wallpaper_image: "{{ i3wm_config_dir }}/wallpaper.png"
+i3wm_wallpaper_image_local: files/wallpaper.jpg
+i3wm_wallpaper_image: "{{ i3wm_config_dir }}/wallpaper.jpg"
 i3wm_screensaver: false
 i3wm_screensaver_time: "90"
 i3wm_xautolock: true
-i3wm_lockscreen_image: "{{ i3wm_config_dir }}/lockscreen.png"
+i3wm_lockscreen_image_local: files/lockscreen.jpg
+i3wm_lockscreen_image: "{{ i3wm_config_dir }}/lockscreen.jpg"
 
 # Layout Settings
 i3wm_gaps:
@@ -196,7 +198,7 @@ i3wm_keybindings_system:
   - key: $mod+Shift+r
     action: "restart"
   - key: $mod+Shift+e
-    action: 'exec --no-startup-id i3-nagbar -t warning -m "You pressed the exit shortcut. Do you really want to exit i3? This will end your X session." -B "Yes, exit i3" "i3-msg exit"'
+    action: 'exec --no-startup-id i3-nagbar -f "pango:{{ i3wm_font.family }} {{ i3wm_font.size }}" -m "Exit i3? This will end your current X session." -B "Exit now" "i3-msg exit" -B "Suspend" "systemctl suspend && pkill i3-nagbar" -B "Reboot" "systemctl reboot" -B "Power off" "systemctl poweroff"'
 
 # Mode keybindings (resize mode)
 i3wm_keybindings_resize:
