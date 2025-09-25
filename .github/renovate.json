@@ -12,8 +12,13 @@
       "automergeType": "pr"
     },
     {
-      "matchManagers": ["ansible-galaxy"],
+      "matchManagers": ["custom.regex", "ansible-galaxy"],
       "automerge": false
+    },
+    {
+       "matchManagers": ["ansible-galaxy", "custom.regex"],
+       "matchPackageNames": ["pluggero/ansible-role-nerdfonts", "pluggero.nerdfonts"],
+       "groupName": "nerdfonts"
     }
   ],
   "enabledManagers": [
@@ -28,5 +33,19 @@
   },
   "assignees": [
     "pluggero"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^meta/main\\.yml$/"
+      ],
+      "matchStrings": [
+        "- role: pluggero\\.nerdfonts\\s+version:\\s+(?<currentValue>[\\d\\.]+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "pluggero/ansible-role-nerdfonts",
+      "versioningTemplate": "semver"
+    }
   ]
 }
