@@ -24,6 +24,7 @@
   "enabledManagers": [
     "github-actions",
     "pip_requirements",
+    "custom.regex",
     "ansible-galaxy"
   ],
   "ansible-galaxy": {
