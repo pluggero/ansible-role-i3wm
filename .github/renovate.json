@@ -16,6 +16,12 @@
       "automerge": false
     },
     {
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["python/cpython"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
        "matchManagers": ["ansible-galaxy", "custom.regex"],
        "matchPackageNames": ["pluggero/ansible-role-nerdfonts", "pluggero.nerdfonts"],
        "groupName": "nerdfonts"
@@ -46,6 +52,18 @@
       ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "pluggero/ansible-role-nerdfonts",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "\\.github/workflows/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "python-version:\\s+[\"'](?<currentValue>\\d+\\.\\d+)[\"']"
+      ],
+      "datasourceTemplate": "github-tags",
+      "depNameTemplate": "python/cpython",
       "versioningTemplate": "semver"
     }
   ]
