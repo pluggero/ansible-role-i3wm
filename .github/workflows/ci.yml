@@ -53,10 +53,7 @@ jobs:
           - vagrant_box: archlinux
             vagrant_box_version: "2025.11.23"
     env:
-      VBOX_BRANCH: "7.1"
-      VBOX_VERSION: "7.1.10"
-      # The build ID can be found in the URL of the VirtualBox iso file: https://download.virtualbox.org/virtualbox/
-      VBOX_BUILD_ID: "169112"
+      VBOX_VERSION: "7.1.12"
       VBOX_DEB_DISTRO: "Ubuntu"
       VBOX_DEB_CODENAME: "noble"
 
@@ -74,11 +71,40 @@ jobs:
       - name: Install test dependencies
         run: pip3 install -r requirements.txt
 
-      - name: Construct VBOX_DEB_URL
+      - name: Get VirtualBox build ID
+        id: get-build-id
         run: |
+          echo "Detecting VirtualBox build ID for version ${VBOX_VERSION}..."
+          BUILD_ID=$(curl -s "https://download.virtualbox.org/virtualbox/${VBOX_VERSION}/" | \
+                    grep -oP 'virtualbox-[0-9.]+_[0-9.]+-\K[0-9]+(?=~'${VBOX_DEB_DISTRO}'~'${VBOX_DEB_CODENAME}')' | \
+                    head -1)
+
+          if [ -z "$BUILD_ID" ]; then
+            echo "Error: Could not detect build ID for VirtualBox ${VBOX_VERSION}"
+            echo "Available files:"
+            curl -s "https://download.virtualbox.org/virtualbox/${VBOX_VERSION}/" | grep -o 'virtualbox-[^"]*\.deb'
+            exit 1
+          fi
+
+          echo "Detected build ID: $BUILD_ID"
+          echo "VBOX_BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
+
+      - name: Construct and validate VBOX_DEB_URL
+        run: |
+          export VBOX_BRANCH="${VBOX_VERSION%.*}"
           export VBOX_DEB_FILE="virtualbox-${VBOX_BRANCH}_${VBOX_VERSION}-${VBOX_BUILD_ID}~${VBOX_DEB_DISTRO}~${VBOX_DEB_CODENAME}_amd64.deb"
           export VBOX_DEB_URL="https://download.virtualbox.org/virtualbox/${VBOX_VERSION}/${VBOX_DEB_FILE}"
-          echo "VBOX_DEB_URL=$VBOX_DEB_URL" >> $GITHUB_ENV
+          echo "Constructed URL: $VBOX_DEB_URL"
+
+          # Validate that the file exists
+          if curl --output /dev/null --silent --head --fail "$VBOX_DEB_URL"; then
+            echo "VirtualBox package file confirmed to exist"
+            echo "VBOX_DEB_URL=$VBOX_DEB_URL" >> $GITHUB_ENV
+          else
+            echo "Error: VirtualBox package file does not exist at $VBOX_DEB_URL"
+            echo "Build ID $VBOX_BUILD_ID may be incorrect for this version/platform combination"
+            exit 1
+          fi
 
       - name: Install VirtualBox
         run: |
