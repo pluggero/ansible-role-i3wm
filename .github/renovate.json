@@ -25,6 +25,12 @@
        "matchManagers": ["ansible-galaxy", "custom.regex"],
        "matchPackageNames": ["pluggero/ansible-role-nerdfonts", "pluggero.nerdfonts"],
        "groupName": "nerdfonts"
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "matchDepNames": ["/^pluggero\\/vagrant-.*-ansible$/"],
+      "automerge": true,
+      "automergeType": "pr"
     }
   ],
   "enabledManagers": [
