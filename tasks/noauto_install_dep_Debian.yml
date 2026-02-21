@@ -15,8 +15,11 @@
 
     - name: Ensure i3wm dependencies are installed
       ansible.builtin.apt:
-        name: "{{ i3wm_dep_pkgs }}"
+        name: "{{ package }}"
         state: present
+      loop: "{{ i3wm_dep_pkgs }}"
+      loop_control:
+        loop_var: package
       become: true
 
 - name: Ensure i3blocks is installed

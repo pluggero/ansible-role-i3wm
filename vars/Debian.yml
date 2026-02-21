@@ -19,5 +19,5 @@ i3wm_dep_pkgs:
   - flameshot
   - btop
 
-i3wm_distro_packages:
+i3wm_distro_pkgs:
   - i3

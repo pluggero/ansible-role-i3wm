@@ -15,6 +15,9 @@
 
     - name: Ensure i3wm is installed
       ansible.builtin.apt:
-        name: "{{ i3wm_distro_packages }}"
+        name: "{{ package }}"
         state: present
+      loop: "{{ i3wm_distro_pkgs }}"
+      loop_control:
+        loop_var: package
       become: true

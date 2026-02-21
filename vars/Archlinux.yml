@@ -13,8 +13,7 @@ i3wm_dep_pkgs:
   - feh
   - pulsemixer
   - flameshot
-  - firefox
   - btop
 
-i3wm_distro_packages:
+i3wm_distro_pkgs:
   - i3
